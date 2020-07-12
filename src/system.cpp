@@ -24,14 +24,18 @@ Processor& System::Cpu() {
 vector<Process>& System::Processes() {
     vector<int> pids = LinuxParser::Pids();
 
+    processes_.clear();
     for(int pid : pids){
         Process process(pid);
         processes_.push_back(process);
     }
 
-    // for(Process& process : processes_) {
-    //     process.CpuUtilization();
-    // } 
+    for(Process& process : processes_) {
+        process.CpuUtilization(LinuxParser::ActiveJiffies(process.Pid()),
+                               LinuxParser::Jiffies());
+    }
+
+    std::sort(processes_.begin(), processes_.end(), std::less<Process>());
 
     return processes_;
 }
