@@ -16,28 +16,28 @@ using std::vector;
 
 // Return the system's CPU
 Processor& System::Cpu() {
-    cpu_ = Processor();
-    return cpu_;
+  cpu_ = Processor();
+  return cpu_;
 }
 
 // Return a container composed of the system's processes
 vector<Process>& System::Processes() {
-    vector<int> pids = LinuxParser::Pids();
+  vector<int> pids = LinuxParser::Pids();
 
-    processes_.clear();
-    for(int pid : pids){
-        Process process(pid);
-        processes_.push_back(process);
-    }
+  processes_.clear();
+  for (int pid : pids) {
+    Process process(pid);
+    processes_.push_back(process);
+  }
 
-    for(Process& process : processes_) {
-        process.CpuUtilization(LinuxParser::ActiveJiffies(process.Pid()),
-                               LinuxParser::Jiffies());
-    }
+  for (Process& process : processes_) {
+    process.CpuUtilization(LinuxParser::ActiveJiffies(process.Pid()),
+                           LinuxParser::Jiffies());
+  }
 
-    std::sort(processes_.begin(), processes_.end(), std::less<Process>());
+  std::sort(processes_.begin(), processes_.end(), std::less<Process>());
 
-    return processes_;
+  return processes_;
 }
 
 // Return the system's kernel identifier (string)

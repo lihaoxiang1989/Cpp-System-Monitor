@@ -106,7 +106,8 @@ long LinuxParser::Jiffies() {
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
     string line, cpu;
-    long int user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice;
+    long int user, nice, system, idle, iowait, irq, softirq, steal, guest,
+        guest_nice;
     std::getline(filestream, line);
     std::istringstream linestream(line);
     linestream >> cpu;
@@ -124,12 +125,11 @@ long LinuxParser::ActiveJiffies(int pid) {
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
   if (filestream.is_open()) {
     long int utime, stime, cutime, cstime;
-    string stats[52] {};
+    string stats[52]{};
     string line;
     std::getline(filestream, line);
     std::istringstream linestream(line);
-    for (int i = 0; i < 52; i++)
-    {
+    for (int i = 0; i < 52; i++) {
       linestream >> stats[i];
     }
     utime = stol(stats[13]);
@@ -146,7 +146,8 @@ long LinuxParser::ActiveJiffies() {
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
     string line, cpu;
-    long int user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice;
+    long int user, nice, system, idle, iowait, irq, softirq, steal, guest,
+        guest_nice;
     std::getline(filestream, line);
     std::istringstream linestream(line);
     linestream >> cpu;
@@ -175,9 +176,7 @@ long LinuxParser::IdleJiffies() {
 }
 
 // Read CPU utilization
-vector<string> LinuxParser::CpuUtilization() {
-  return {};
-}
+vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
@@ -254,8 +253,7 @@ string LinuxParser::Uid(int pid) {
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatusFilename);
   if (filestream.is_open()) {
     string line, key, value;
-    while (std::getline(filestream, line))
-    {
+    while (std::getline(filestream, line)) {
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
         if (key == "Uid:") {
@@ -294,14 +292,13 @@ long LinuxParser::UpTime(int pid_) {
   if (filestream.is_open()) {
     vector<string> stats;
     string line, temp;
-    bool reading {false};
+    bool reading{false};
     std::getline(filestream, line);
     std::istringstream linestream(line);
     while (linestream >> temp) {
       if (temp[temp.length() - 1] == ')') {
         reading = true;
-      } else if (reading)
-      {
+      } else if (reading) {
         stats.push_back(temp);
       }
     }
